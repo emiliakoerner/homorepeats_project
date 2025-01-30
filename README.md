@@ -1,12 +1,14 @@
 # The functional relevance of amino acid homorepeats overcomes the evolutionary selective pressure that keeps housekeeping protein sequences shorter
 This repository contains the data and code needed to reproduce the results reported in our paper.
 
-**README.md** guides you all over this repository. **The structure of this repository is the next:**   
- - **main_tables** needed to reproduce the main figures. (R script)
-        - **suppl_tables** for the supplementary material.  
+**README.md** guides you all over this repository. **The structure of this repository is the next:** 
+ - **data** Data needed to run the scripts and recreate the results.
+        - **raw** Data downloaded from sources like UniProt
+        - **processed** Processed data that is not a result.
+ - **scripts** Code for recreating results (Python scripts)
+        - **suppl_tables** for the supplementary material.
+ - **results** Files with lists of proteins and relevant attributes, figures.
 
- - **main_work** contains the code needed to reproduce the main results. (Python script)  
-        - **suppl_work**, where the code for the supplementary material is.
    ---
 ### Data: the annotations were downloaded from public repositories
 
