@@ -18,6 +18,6 @@ The [reference proteomes](https://www.uniprot.org/proteomes/?query=*&fil=referen
 ### Housekeeping gene lists
 The species-specific housekeeping gene lists were obtained from different publications for [Homo sapiens](link), [Mus musculus](link), ...
 
-### main_work: Folder with separate files for each consecutive piece of code
+### scripts: Folder with separate files for each consecutive piece of code
 - Mapping_hklists_to_Uniprot.md: Adds matching UniProt IDs (from a mapping file downloaded from Uniprot) to a list of housekeeping genes (Identifiers like WormBaseID, GeneName, ...) for further downstream mapping to the respective proteome
 - - Process_polyx.md: 
