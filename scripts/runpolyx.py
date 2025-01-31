@@ -5,10 +5,10 @@ import os
 import sys
 import shutil
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.append(os.path.join(base_dir, "hr_lib"))
-import constants  # Import constants.py from hr_lib
+import constants
 
-polyx_script = os.path.join(base_dir, "scripts", "polyx2", "polyx2_standalone.pl")  # Path to polyx.pl
+def run_polyx():
+    polyx_script = os.path.join(base_dir, "scripts", "polyx2", "polyx2_standalone.pl")  # Path to polyx.pl
     output_dir = os.path.join(base_dir, "data", "processed", "polyxdata")  # Directory where output files should go
 
     # Ensure output directory exists
