@@ -2,13 +2,15 @@
 ## Import python modules
 ``` python
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hr_lib')))
+import constants
 ```
 ## Functions
 ``` python
 # Function to map Housekeeping gene lists to Uniprot using the
-# underlying data files of the Uniprot Mapping tool. Has to be done for each organism individually.
-# hk list should have Identifier (ENS ID, WBID, Flybase ID, ...) in column 1 (Index 0)
-def Housekeeping_mapping_uniprot(hk_file, mapping_file, hk_list):
+# underlying data files of the Uniprot Mapping tool.
+def Housekeeping_mapping_uniprot(hk_file, mapping_file, output_file):
     with open(mapping_file, 'r') as mapping:
         mapping_lines = mapping.readlines()     # Mapping file is read into python storage
     with open(hk_file, 'r') as hk_file, open(hk_list, 'w') as output:
@@ -24,11 +26,13 @@ def Housekeeping_mapping_uniprot(hk_file, mapping_file, hk_list):
 ```
 ## File paths and calling the function
 ``` python
-hk_file = "unmapped hk files/human_hk_unmapped.txt"     #original file without Uniprot IDs
-mapping_dir = "mapping files"
-mapping_file = os.path.join(mapping_dir, "HUMAN_9606_idmapping.txt")        # Mapping file from Uniprot
-housekeeping_dir = "housekeeping_lists"
-hk_list = os.path.join(housekeeping_dir, "human_hk.txt")        # Output file with both species-specific ID and Uniprot ID
 
-Housekeeping_mapping_uniprot(hk_file, mapping_file, hk_list)
+for organism in organisms:
+    hk_file = file_paths[organism]['UNMAPPED_HK_LIST_FILE']
+    mapping_file = mapping_files[organism]
+    hk_list = file_paths[organism]['MAPPED_HK_FILE']
+
+    print(f"Processing {organism}...")  # Print status update
+    Housekeeping_mapping_uniprot(hk_file, mapping_file, hk_list)
+
 ```
