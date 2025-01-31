@@ -24,7 +24,7 @@ def run_polyx():
         os.makedirs(os.path.dirname(polyx_output_path), exist_ok=True)
 
         # Set script path
-        polyx_script = os.path.join(base_dir, "scripts", "polyx.pl")
+        polyx_script = os.path.join(base_dir, "scripts", "polyx2", "polyx2_standalone.pl")
 
         # Construct the command
         command = ["perl", polyx_script, proteome_path]
