@@ -3,7 +3,9 @@
 import os
 
 # Base directories
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the current directory
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the current directory
+BASE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
+print(BASE_DIR)
 DATA_DIR = os.path.join(BASE_DIR, "data")
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 PROCESSED_DIR = os.path.join(DATA_DIR, "processed")

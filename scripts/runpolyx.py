@@ -2,10 +2,9 @@
 # Import python modules
 import subprocess
 import os
-import sys
 import shutil
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 import constants
+base_dir = constants.BASE_DIR
 
 def run_polyx():
     polyx_script = os.path.join(base_dir, "scripts", "polyx2", "polyx2_standalone.pl")  # Path to polyx.pl
@@ -18,7 +17,8 @@ def run_polyx():
         print(f"Running PolyX for {organism}...")
 
         proteome_path = constants.file_paths[organism]['PROTEOME_FILE']
-        output_file = os.path.join(output_dir, f"{organism}_polyx.txt")  # Final renamed file
+        print(proteome_path)
+        output_file = constants.file_paths[organism]['POLYX_FILE']
 
         # Change working directory to output folder to run PolyX
         os.chdir(output_dir)
@@ -28,7 +28,7 @@ def run_polyx():
         try:
             # Run polyx.pl
             subprocess.run(command, check=True)
-
+            print("Files in out directory", os.listdir(output_dir))
             # Move and rename output file
             if os.path.exists("output_polyx.txt"):
                 shutil.move("output_polyx.txt", output_file)
@@ -38,5 +38,5 @@ def run_polyx():
 
         except subprocess.CalledProcessError as e:
             print(f"Error running PolyX for {organism}: {e}")
-	
+
 run_polyx()
