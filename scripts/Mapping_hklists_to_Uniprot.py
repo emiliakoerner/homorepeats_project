@@ -1,13 +1,10 @@
 # Mapping housekeeping lists from different sources to UniProt using underlying data from UniProt ID mapping tool
-## Import python modules
-``` python
+# Import python modules
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hr_lib')))
 import constants
-```
-## Functions
-``` python
+
 # Function to map Housekeeping gene lists to Uniprot using the
 # underlying data files of the Uniprot Mapping tool.
 def Housekeeping_mapping_uniprot(hk_file, mapping_file, output_file):
@@ -23,9 +20,6 @@ def Housekeeping_mapping_uniprot(hk_file, mapping_file, output_file):
                     uniprot_id = columns[0]     # The Uniprot ID is stored and written into an output file with both IDs
                     output.write(f"{listid}\t{uniprot_id}\n")
                     break
-```
-## File paths and calling the function
-``` python
 
 for organism in organisms:
     hk_file = file_paths[organism]['UNMAPPED_HK_LIST_FILE']
@@ -35,4 +29,3 @@ for organism in organisms:
     print(f"Processing {organism}...")  # Print status update
     Housekeeping_mapping_uniprot(hk_file, mapping_file, hk_list)
 
-```

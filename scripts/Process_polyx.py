@@ -1,15 +1,11 @@
 # Process Polyx scanner information and create a new file with the Polyx information for each protein
-## Import python modules
-``` python
+# Import python modules
 import os
 from collections import defaultdict
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hr_lib')))
 import constants  # Import constants.py from hr_lib
 
-```
-## Functions
-``` python
 def Polyx_dictionary(input):   #create dictionary to store information for each protein ID
     global polyxdata
     polyxdata = defaultdict(lambda: {"polyx_count": 0, "polyx_types": [], "polyx_lengths": [], "total_length": 0})
@@ -84,10 +80,7 @@ for organism in constants.organisms:  # Loop through each organism
         Create_final_doc(mapped_file, output_file)  # Generate final file
 
         print(f"Processed {organism}: created {output_file}")
-    
-```
-## File paths and call function
-``` python
+
 Process_polyxdata()
-```
+
 

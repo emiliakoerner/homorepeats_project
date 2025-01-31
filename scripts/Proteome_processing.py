@@ -1,6 +1,5 @@
 # Process reference proteomes and Housekeeping gene list to create a list of proteins with their length and Housekeeping status as attributes
-## Import python modules
-``` python
+# Import python modules
 import os
 import re
 from collections import defaultdict
@@ -8,9 +7,7 @@ import requests
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hr_lib')))
 import constants  # Import constants.py from hr_lib
-```
-## Functions
-``` python
+
 def Process_proteomes():
     for organism in constants.organisms:  # Loop through each organism
         print(f"Processing {organism}...")
@@ -76,9 +73,6 @@ def Map_to_hklist(proteomedict, housekeeping_list, mapped):
                 hk_count += 1
             mapped.write(f"{gene_name}\t{uniprot_id}\t{length}\t{hk_status}\n") # write output file
         print("Hk mapping complete:", hk_count, "hk proteins found")
-```
-## Running the program on all proteomes in the directory "proteome_dir"
-``` python
+
 Process_proteomes()
-```
 
