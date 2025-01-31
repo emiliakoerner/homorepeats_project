@@ -3,6 +3,10 @@
 ``` python
 import os
 from collections import defaultdict
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hr_lib')))
+import constants  # Import constants.py from hr_lib
+
 ```
 ## Functions
 ``` python
@@ -61,22 +65,29 @@ def Create_final_doc(mapped, outputfile):    #Code to create final document by a
                 output.write(f"{gene_name}\t{uniprot_id}\t{length}\t{housekeeping}\t0\t-\t0\t0\t0\t0\n")
 
 #main processing function for polyx data
-def Process_polyxdata(mapped_dir, polyx_dir, outputdir):
-    for mappedfile in os.listdir(mapped_dir):   # process every txt file in the directory
-        if mappedfile.endswith("_mapped.txt"):
-            species = mappedfile.replace("_mapped.txt", "") # the species name is in the file name
-            print(f"processing {species}")
-            polyx_file = f"{species}_polyx.txt"
-            polyx_path = os.path.join(polyx_dir, polyx_file)
-            mapped_path = os.path.join(mapped_dir, mappedfile)
-            output_path = f"{outputdir}/{species}_mapped_polyx.tsv"     # file paths
+def Process_polyxdata():
+for organism in constants.organisms:  # Loop through each organism
+        mapped_file = constants.FILE_PATHS[organism]["MAPPED_HK_FILE"]
+        polyx_file = constants.FILE_PATHS[organism]["POLYX_FILE"]
+        output_file = constants.FILE_PATHS[organism]["MAPPED_HK_POLYX_FILE"]
 
-            Polyx_dictionary(polyx_path)        # read polyx scanner output in a dictionary
-            Create_final_doc(mapped_path, output_path)      # output file
-            print(f"Processed {species}: created {output_path}")
+        if not os.path.exists(mapped_file):
+            print(f"Skipping {organism} - No mapped file found!")
+            continue
+        if not os.path.exists(polyx_file):
+            print(f"Skipping {organism} - No polyx data file found!")
+            continue
+
+        print(f"Processing {organism}...")
+
+        Polyx_dictionary(polyx_file)  # Read polyx scanner output into a dictionary
+        Create_final_doc(mapped_file, output_file)  # Generate final file
+
+        print(f"Processed {organism}: created {output_file}")
+    
 ```
 ## File paths and call function
 ``` python
-Process_polyxdata("mapped_hk", "polyx_outputs", "mapped_hk_polyx")
+Process_polyxdata()
 ```
 
