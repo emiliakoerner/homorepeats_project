@@ -14,13 +14,13 @@ RESULTS_DIR = os.path.join(BASE_DIR, "results")
 SCRIPTS_DIR = os.path.join(BASE_DIR, "scripts")
 
 # mapping files from Uniprot
-human_mapping = os.path.join(RAW_DIR, "mapping files/HUMAN_9606_idmapping.txt")
-mouse_mapping = os.path.join(RAW_DIR, "mapping files/MOUSE_10090_idmapping.txt")
-fruitfly_mapping = os.path.join(RAW_DIR, "mapping files/DROME_7227_idmapping.txt")
-celegans_mapping = os.path.join(RAW_DIR, "mapping files/CAEEL_6239_idmapping.txt")
-yeast_mapping = os.path.join(RAW_DIR, "mapping files/YEAST_559292_idmapping.txt")
-ecoli_mapping = os.path.join(RAW_DIR, "mapping files/ECOLI_83333_idmapping.txt")
-arabidopsis_mapping = os.path.join(RAW_DIR, "mapping files/ARATH_3702_idmapping.txt")
+human_mapping = os.path.join(RAW_DIR, "mapping_files\\HUMAN_9606_idmapping.txt")
+mouse_mapping = os.path.join(RAW_DIR, "mapping_files\\MOUSE_10090_idmapping.txt")
+fruitfly_mapping = os.path.join(RAW_DIR, "mapping_files\\DROME_7227_idmapping.txt")
+celegans_mapping = os.path.join(RAW_DIR, "mapping_files\\CAEEL_6239_idmapping.txt")
+yeast_mapping = os.path.join(RAW_DIR, "mapping_files\\YEAST_559292_idmapping.txt")
+ecoli_mapping = os.path.join(RAW_DIR, "mapping_files\\ECOLI_83333_idmapping.txt")
+arabidopsis_mapping = os.path.join(RAW_DIR, "mapping_files\\ARATH_3702_idmapping.txt")
 
 # data file paths
 organisms = ['human', 'mouse', 'fruitfly', 'celegans', 'yeast', 'ecoli', 'arabidopsis']

@@ -62,10 +62,10 @@ def Create_final_doc(mapped, outputfile):    #Code to create final document by a
 
 #main processing function for polyx data
 def Process_polyxdata():
-for organism in constants.organisms:  # Loop through each organism
-        mapped_file = constants.FILE_PATHS[organism]["MAPPED_HK_FILE"]
-        polyx_file = constants.FILE_PATHS[organism]["POLYX_FILE"]
-        output_file = constants.FILE_PATHS[organism]["MAPPED_HK_POLYX_FILE"]
+    for organism in constants.organisms:  # Loop through each organism
+        mapped_file = constants.file_paths[organism]["MAPPED_HK_FILE"]
+        polyx_file = constants.file_paths[organism]["POLYX_FILE"]
+        output_file = constants.file_paths[organism]["MAPPED_HK_POLYX_FILE"]
 
         if not os.path.exists(mapped_file):
             print(f"Skipping {organism} - No mapped file found!")

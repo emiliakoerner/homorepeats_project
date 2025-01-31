@@ -21,9 +21,11 @@ def Housekeeping_mapping_uniprot(hk_file, mapping_file, output_file):
                     output.write(f"{listid}\t{uniprot_id}\n")
                     break
 
+organisms = constants.organisms
+file_paths = constants.file_paths
 for organism in organisms:
     hk_file = file_paths[organism]['UNMAPPED_HK_LIST_FILE']
-    mapping_file = mapping_files[organism]
+    mapping_file = getattr(constants, f"{organism}_mapping") 
     hk_list = file_paths[organism]['MAPPED_HK_FILE']
 
     print(f"Processing {organism}...")  # Print status update
