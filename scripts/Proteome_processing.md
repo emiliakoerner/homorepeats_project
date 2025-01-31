@@ -5,21 +5,28 @@ import os
 import re
 from collections import defaultdict
 import requests
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hr_lib')))
+import constants  # Import constants.py from hr_lib
 ```
 ## Functions
 ``` python
-def Process_proteomes(proteome_dir, hk_dir):
-    for proteome in os.listdir(proteome_dir):       # every proteome in the directory is processed
-        if proteome.endswith(".fasta"):             # if it is a fasta file
-            species = proteome.replace(".fasta", "")        # the file name is saved as species
-            proteome_path = os.path.join(proteome_dir, proteome)
-            housekeeping_file = proteome.replace(".fasta", "_hk.txt")   # the hk gene list has the same file name but with _hk
-            housekeeping_file = os.path.join(hk_dir, housekeeping_file)
+def Process_proteomes():
+    for organism in constants.organisms:  # Loop through each organism
+        print(f"Processing {organism}...")
 
-            mapped = f"mapped_hk/{species}_mapped.txt"      # the output file should have the same file name but with _mapped
+        # Retrieve file paths from constants.py
+        proteome_path = constants.file_paths[organism]['PROTEOME_FILE']
+        hk_list_path = constants.file_paths[organism]['HK_LIST_FILE']
+        mapped_output_path = constants.file_paths[organism]['MAPPED_HK_FILE']
 
-            proteome_dict = Proteome_dictionary(proteome_path)      # calling the function that reads proteome into a dictionary
-            Map_to_hklist(proteome_dict, housekeeping_file, mapped)     # calling the function that maps proteome to hk gene list
+        # Ensure the output directory exists
+        os.makedirs(os.path.dirname(mapped_output_path), exist_ok=True)
+
+        # Process proteome and housekeeping lists
+        proteome_dict = Proteome_dictionary(proteome_path)
+        Map_to_hklist(proteome_dict, hk_list_path, mapped_output_path)
+        
 
 def Proteome_dictionary(proteome): #Code to store protein data from proteome in a dict (UniprotID, gene name, sequence)
     proteomedict = defaultdict(lambda: {"gene_name": None, "sequence": ""})  #Create empty dictionary (uniprot -> gn, sequence)
@@ -72,9 +79,6 @@ def Map_to_hklist(proteomedict, housekeeping_list, mapped):
 ```
 ## Running the program on all proteomes in the directory "proteome_dir"
 ``` python
-proteome_dir = "proteomes"
-housekeeping_dir = "housekeeping_lists"
-
-Process_proteomes(proteome_dir, housekeeping_dir)
+Process_proteomes()
 ```
 

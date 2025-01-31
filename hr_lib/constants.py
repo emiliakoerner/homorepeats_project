@@ -26,11 +26,11 @@ file_paths = {}
 for organism in organisms:
     file_paths[organism] = {
         # Data
-        'PROTEOME_FILE': os.path.join(raw_dir, f"proteomes/{organism}.txt"),
+        'PROTEOME_FILE': os.path.join(raw_dir, f"proteomes/{organism}.fasta"),
         'UNMAPPED_HK_LIST_FILE': os.path.join(raw_dir, f"hk_unmapped/{organism}_hk_unmapped.txt"),
-        'PROCESSED_DATA_FILE': os.path.join(processed_dir, f"{organism}_hk.txt"),
+        'HK_LIST_FILE': os.path.join(processed_dir, f"housekeeping_lists/{organism}_hk.txt"),
         'POLYX_FILE': os.path.join(POLYX_DIR, f"{organism}_polyx.txt"),
         # Results
-        'MAPPED_HK_FILE': os.path.join(results_dir, f"{organism}_mapped.txt"),
-        'MAPPED_HK_POLYX_FILE': os.path.join(results_dir, f"{organism}_mapped_polyx.tsv")
+        'MAPPED_HK_FILE': os.path.join(results_dir, f"mapped_hk/{organism}_mapped.txt"),
+        'MAPPED_HK_POLYX_FILE': os.path.join(results_dir, f"mapped_hk_polyx/{organism}_mapped_polyx.tsv")
     }
