@@ -13,7 +13,7 @@ def Polyx_dictionary(input):   #create dictionary to store information for each 
         next(file)      # skip header
         for line in file:
             parts = line.strip().split("\t")
-            protein_info = parts[0]  # First column, e.g., sp|Q8H102|BH128_ARATH
+            protein_info = parts[5]  # First column, e.g., sp|Q8H102|BH128_ARATH
             protein_ID_parts = protein_info.split('|')  # Split to extract protein ID
 
             if len(protein_ID_parts) < 2:  # Check if the split resulted in the expected number of parts
@@ -22,9 +22,9 @@ def Polyx_dictionary(input):   #create dictionary to store information for each 
 
             protein_ID = protein_ID_parts[1]  # The second part is the protein ID (e.g., Q8H102)
             # variables for each column
-            polyx_type = parts[3]
-            start = int(parts[1])
-            end = int(parts[2])
+            polyx_type = parts[2]
+            start = int(parts[0])
+            end = int(parts[1])
             length = end - start + 1            # Calculating the total length of polyx regions of each region
             # Update the data for polyx count, types and length:
             polyxdata[protein_ID]["polyx_count"] += 1          # Count goes up 1 for every line with that protein ID
@@ -76,6 +76,7 @@ def Process_polyxdata():
 
         print(f"Processing {organism}...")
 
+        print(f"polyx_file = {polyx_file}")
         Polyx_dictionary(polyx_file)  # Read polyx scanner output into a dictionary
         Create_final_doc(mapped_file, output_file)  # Generate final file
 
