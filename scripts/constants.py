@@ -10,7 +10,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 PROCESSED_DIR = os.path.join(DATA_DIR, "processed")
 POLYX_DIR = os.path.join(PROCESSED_DIR, "polyxdata")
-RESULTS_DIR = os.path.join(BASE_DIR, "results")
+RESULTS_DIR = os.path.join(BASE_DIR, "results", "tables")
 SCRIPTS_DIR = os.path.join(BASE_DIR, "scripts")
 
 # mapping files from Uniprot
