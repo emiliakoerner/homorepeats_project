@@ -3,9 +3,11 @@ library(tidyverse)
 library(readxl)
 library(dplyr)
 library(gridExtra)
+library(here)
+here()
 
 # Read in data for all organisms
-file_paths <- list.files("C:/Users/wrede/OneDrive - JGU/Desktop/Masterarbeit/model organisms/mapped_hk_polyx", 
+file_paths <- list.files(here("results", "tables", "mapped_hk_polyx"), 
                          pattern = "*.tsv", full.names = TRUE)
 organism_data <- file_paths %>%
   map_dfr(~read_tsv(.x, show_col_types = FALSE) %>%
@@ -25,14 +27,7 @@ HkPolyx$Organism <- factor(HkPolyx$Organism, levels = c("ecoli", "yeast", "arabi
 HkPolyx <- HkPolyx %>%
   mutate(Organism = factor(Organism,
                            levels = c("ecoli", "yeast", "celegans", "fruitfly", "arabidopsis", "mouse"),
-                           labels = c(
-                             "italic('E. coli')",
-                             "italic('S. cerevisiae')",
-                             "italic('C. elegans')",
-                             "italic('D. melanogaster')",
-                             "italic('A. thaliana')",
-                             "italic('M. musculus')"
-                           )
+                           labels = c("E. coli", "S. cerevisiae", "C. elegans", "D. melanogaster", "A. thaliana", "M. musculus")
   ))
 
 
@@ -46,48 +41,49 @@ my_theme <- theme(
   strip.text = element_text(size = 12, face = "bold"))
 
 # Visualization 1
-# Corrected significance_hk
 significance_hk <- tibble(
   Organism = factor(
     c("ecoli", "celegans", "fruitfly", "mouse", "yeast", "arabidopsis"),
     levels = c("ecoli", "yeast", "celegans", "fruitfly", "arabidopsis", "mouse"),
-    labels = c(
-      "italic('E. coli')",
-      "italic('S. cerevisiae')",
-      "italic('C. elegans')",
-      "italic('D. melanogaster')",
-      "italic('A. thaliana')",
-      "italic('M. musculus')"
-    )
+    labels = c("E. coli", "S. cerevisiae", "C. elegans", "D. melanogaster", "A. thaliana", "M. musculus")
   ),
   x = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5),  # X coordinates for label placement
   y = c(900, 900, 900, 900, 900, 900),  # Y coordinates for label placement
   label = c("***", "***", "***", "***", "***", "***")  # Significance levels for each organism
 )
 
-
-
 HkPolyx %>%
   ggplot(aes(x = Hk, y = Length, fill = Hk)) +
   geom_boxplot(size = 1.2, notch = TRUE) +
-  #geom_jitter(width = 0.2, alpha = 0.5, size = 0.01) +
   ylab("Protein length (aa)") +
   coord_cartesian(ylim = c(100, 900)) +
   scale_fill_manual(values = c("#ffc8d2", "#ccffee")) +
   stat_summary(fun = "mean", geom = "point", shape = 21, size = 4, color = "black", fill = "white") +
-  facet_wrap(~Organism, ncol = 3, labeller = label_parsed) +  # Facet by organism
+  facet_wrap(~Organism, ncol = 3, labeller = labeller(Organism = c(
+    "E. coli" = expression(italic("E. coli")),
+    "S. cerevisiae" = expression(italic("S. cerevisiae")),
+    "C. elegans" = expression(italic("C. elegans")),
+    "D. melanogaster" = expression(italic("D. melanogaster")),
+    "A. thaliana" = expression(italic("A. thaliana")),
+    "M. musculus" = expression(italic("M. musculus"))
+  ))) +  # Use labeller to apply italicized organism names
   my_theme +
   geom_text(data = significance_hk, aes(x = x, y = y, label = label), size = 4, color = "black", inherit.aes = FALSE) +
   geom_text(
     data = HkPolyx %>%
       group_by(Hk, Organism) %>%
       summarize(median_length = median(Length),
-        Count = n()),
+                Count = n()),
     aes(x = Hk,
-      y = median_length - 50,  # Place the text at the median
-      label = Count),
+        y = median_length - 50,  # Place the text at the median
+        label = Count),
     inherit.aes = FALSE,
-    size = 3, color = "black")
+    size = 3, color = "black") +
+  theme(strip.text = element_text(face = "italic"))
+
+
+
+
 
 significance_labels <- tibble(
   Organism = c("ecoli", "celegans", "fruitfly", "mouse", "yeast", "arabidopsis", "celegans", "fruitfly", "mouse", "yeast", "arabidopsis"),  # Replace with actual organism names

@@ -3,8 +3,7 @@
 ---
 title: "PolyX Analysis"
 author: "Emilia Körner"
-date: "`r Sys.Date()`"
-format: html
+format: powerpoint_presentation
 ---
 
 ## **Load Necessary Libraries**
