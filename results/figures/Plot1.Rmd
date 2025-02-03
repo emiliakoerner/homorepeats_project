@@ -1,0 +1,104 @@
+# Figures about Housekeeping proteins generated in R
+## Import modules and set working directory
+---
+title: "PolyX Analysis"
+author: "Emilia Körner"
+date: "`r Sys.Date()`"
+format: html
+---
+
+## **Load Necessary Libraries**
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+library(dplyr)
+library(gridExtra)
+library(here)  # Helps avoid hardcoded paths
+```
+
+## **Read in Data for All Organisms**
+```{r load-data}
+file_paths <- list.files(here("results", "tables", "mapped_hk_polyx"), 
+                         pattern = "*.tsv", full.names = TRUE)
+organism_data <- file_paths %>%
+  map_dfr(~read_tsv(.x, show_col_types = FALSE) %>%
+            mutate(
+              Polyx_lengths = as.character(Polyx_lengths),  # Ensure consistent type for Polyx_lengths
+              Count_grouped = as.character(Count_grouped),  # Ensure consistent type for Count_grouped
+              Organism = str_remove(tools::file_path_sans_ext(basename(.x)), "_mapped_polyx")  # Remove suffix
+            ))
+```
+
+## **Process Data**
+```{r process-data}
+HkPolyx <- organism_data %>%
+  mutate(Hk = recode(Hk, `0` = "not Hk", `1` = "Hk"),
+         Hk = as.factor(Hk),
+         Hk = factor(Hk, levels = rev(levels(Hk))),
+         Count_grouped = factor(Count_grouped, levels = c("0", "1", ">1")))
+HkPolyx$Organism <- factor(HkPolyx$Organism, levels = c("ecoli", "yeast", "arabidopsis", "celegans", "fruitfly", "mouse"))
+HkPolyx <- HkPolyx %>%
+  mutate(Organism = factor(Organism,
+                           levels = c("ecoli", "yeast", "celegans", "fruitfly", "arabidopsis", "mouse"),
+                           labels = c("E. coli", "S. cerevisiae", "C. elegans", "D. melanogaster", "A. thaliana", "M. musculus")
+  ))
+```
+
+## **Define a Custom Theme**
+```{r theme-setup}
+my_theme <- theme(
+  axis.title = element_text(size = 16),
+  axis.text = element_text(size = 14),
+  legend.text = element_text(size = 14),
+  legend.title = element_text(size = 15),
+  plot.title = element_text(size = 16, hjust = 0.5),
+  strip.text = element_text(size = 12, face = "bold")
+)
+```
+
+## **Add Significance Annotations**
+```{r significance}
+significance_hk <- tibble(
+  Organism = factor(
+    c("ecoli", "celegans", "fruitfly", "mouse", "yeast", "arabidopsis"),
+    levels = c("ecoli", "yeast", "celegans", "fruitfly", "arabidopsis", "mouse"),
+    labels = c("E. coli", "S. cerevisiae", "C. elegans", "D. melanogaster", "A. thaliana", "M. musculus")
+  ),
+  x = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5),  # X coordinates for label placement
+  y = c(900, 900, 900, 900, 900, 900),  # Y coordinates for label placement
+  label = c("***", "***", "***", "***", "***", "***")  # Significance levels for each organism
+)
+```
+
+## Plot
+```{r plot}
+HkPolyx %>%
+  ggplot(aes(x = Hk, y = Length, fill = Hk)) +
+  geom_boxplot(size = 1.2, notch = TRUE) +
+  ylab("Protein length (aa)") +
+  coord_cartesian(ylim = c(100, 900)) +
+  scale_fill_manual(values = c("#ffc8d2", "#ccffee")) +
+  stat_summary(fun = "mean", geom = "point", shape = 21, size = 4, color = "black", fill = "white") +
+  facet_wrap(~Organism, ncol = 3, labeller = labeller(Organism = c(
+    "E. coli" = expression(italic("E. coli")),
+    "S. cerevisiae" = expression(italic("S. cerevisiae")),
+    "C. elegans" = expression(italic("C. elegans")),
+    "D. melanogaster" = expression(italic("D. melanogaster")),
+    "A. thaliana" = expression(italic("A. thaliana")),
+    "M. musculus" = expression(italic("M. musculus"))
+  ))) +  # Use labeller to apply italicized organism names
+  my_theme +
+  geom_text(data = significance_hk, aes(x = x, y = y, label = label), size = 4, color = "black", inherit.aes = FALSE) +
+  geom_text(
+    data = HkPolyx %>%
+      group_by(Hk, Organism) %>%
+      summarize(median_length = median(Length),
+                Count = n()),
+    aes(x = Hk,
+        y = median_length - 50,  # Place the text at the median
+        label = Count),
+    inherit.aes = FALSE,
+    size = 3, color = "black") +
+  theme(strip.text = element_text(face = "italic"))
+```
+
