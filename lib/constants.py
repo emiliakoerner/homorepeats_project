@@ -26,29 +26,25 @@ SELECTED_ORGANISMS = {"UP000005640", "UP000000589", "UP000000803", "UP000001940"
 #SELECTED_ORGANISMS = None
 
 # mapping files from Uniprot for housekeeping
-human_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\HUMAN_9606_idmapping.txt")
-mouse_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\MOUSE_10090_idmapping.txt")
-fruitfly_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\DROME_7227_idmapping.txt")
-celegans_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\CAEEL_6239_idmapping.txt")
-yeast_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\YEAST_559292_idmapping.txt")
-ecoli_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\ECOLI_83333_idmapping.txt")
-arabidopsis_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\ARATH_3702_idmapping.txt")
+UP000005640_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\HUMAN_9606_idmapping.txt")
+UP000000589_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\MOUSE_10090_idmapping.txt")
+UP000000803_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\DROME_7227_idmapping.txt")
+UP000001940_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\CAEEL_6239_idmapping.txt")
+UP000002311_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\YEAST_559292_idmapping.txt")
+UP000000625_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\ECOLI_83333_idmapping.txt")
+UP000006548_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\ARATH_3702_idmapping.txt")
 
 # list of organisms?
 
-"""
+# Housekeeping (move to extra file?)
 # data file paths
-organisms = ['human', 'mouse', 'fruitfly', 'celegans', 'yeast', 'ecoli', 'arabidopsis']
+organisms = ["UP000005640", "UP000000589", "UP000000803", "UP000001940", "UP000006548", "UP000000625", "UP000002311"]
 file_paths = {}
-for organism in organisms:
-    file_paths[organism] = {
+for up_id in organisms:
+    file_paths[up_id] = {
         # Data
-        'PROTEOME_FILE': os.path.join(MAINTABLES_DIR, f"proteomes/{organism}.fasta"),
-        'UNMAPPED_HK_LIST_FILE': os.path.join(MAINTABLES_DIR, f"hk_unmapped/{organism}_hk_unmapped.txt"),
-        'HK_LIST_FILE': os.path.join(MAINTABLES_DIR, f"housekeeping_lists/{organism}_hk.txt"),
-        'POLYX_FILE': os.path.join(POLYX_DIR, f"{organism}_polyx.txt"),
+        'UNMAPPED_HK_LIST_FILE': os.path.join(MAINTABLES_DIR, f"hk_unmapped/{up_id}_hk_unmapped.txt"),
+        'HK_LIST_FILE': os.path.join(OUTPUT_DIR, f"housekeeping_lists/{up_id}_hk.txt"),
         # Results
-        'MAPPED_HK_FILE': os.path.join(CURRENT_DIR, f"mapped_hk/{organism}_mapped.txt"),
-        'MAPPED_HK_POLYX_FILE': os.path.join(CURRENT_DIR, f"mapped_hk_polyx/{organism}_mapped_polyx.tsv")
+        'MAPPED_HK_POLYX_FILE': os.path.join(CURRENT_DIR, f"proteomes_hrs_hk/{up_id}_hrs_hk.tsv")
     }
-"""

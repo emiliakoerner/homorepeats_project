@@ -2,8 +2,8 @@
 # Import python modules
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hr_lib')))
-import constants
+sys.path.append(os.path.abspath('../../lib'))
+from lib.constants import *
 
 # Function to map Housekeeping gene lists to Uniprot using the
 # underlying data files of the Uniprot Mapping tool.
@@ -21,13 +21,12 @@ def Housekeeping_mapping_uniprot(hk_file, mapping_file, output_file):
                     output.write(f"{listid}\t{uniprot_id}\n")
                     break
 
-organisms = constants.organisms
-file_paths = constants.file_paths
-for organism in organisms:
-    hk_file = file_paths[organism]['UNMAPPED_HK_LIST_FILE']
-    mapping_file = getattr(constants, f"{organism}_mapping") 
-    hk_list = file_paths[organism]['MAPPED_HK_FILE']
 
-    print(f"Processing {organism}...")  # Print status update
+for up_id in organisms:
+    hk_file = file_paths[up_id]['UNMAPPED_HK_LIST_FILE']
+    mapping_file = globals().get(f"{up_id}_mapping")
+    hk_list = file_paths[up_id]['HK_LIST_FILE']
+
+    print(f"Processing {up_id}...")  # Print status update
     Housekeeping_mapping_uniprot(hk_file, mapping_file, hk_list)
 
