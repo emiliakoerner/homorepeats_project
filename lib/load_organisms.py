@@ -4,8 +4,8 @@ from constants import *
 import gzip
 
 def discover_organisms():
-    #Scan directories and find all organisms (UP IDs)
-    organisms = {}
+    #Scan directories and find all organisms (UP IDs) and creates a dictionary with UP IDs as key, taxon category and
+    organisms = {}                      # file path as values
     for category in TAXON_CATEGORIES:
         category_path = os.path.join(REF_DIR, category)
         if os.path.exists(category_path):
@@ -35,7 +35,7 @@ def discover_organisms():
 """
 
 def parse_readme():
-    """Parse the README file to map Proteome IDs to Organism Names"""
+    # Parse the README file to map Proteome IDs to Organism Names. Returns a dictionary
     proteome_to_name = {}
     with open(README_PATH, "r", encoding="utf-8") as readme_file:
         reader = csv.reader(readme_file, delimiter="\t")
@@ -48,7 +48,7 @@ def parse_readme():
     return proteome_to_name
 
 def get_filtered_organisms():
-    """Return only the selected organisms with paths and names"""
+    # Return only the selected organisms with paths and names by calling the first 2 functions
     all_organisms = discover_organisms()
     name_mapping = parse_readme()
 
@@ -60,7 +60,7 @@ def get_filtered_organisms():
     # Filter organisms based on selection
     return {k: v for k, v in all_organisms.items() if k in SELECTED_ORGANISMS}
 
-
+# Execution
 organisms = get_filtered_organisms()
 print("Discovered Organisms:")
 for up_id, info in organisms.items():

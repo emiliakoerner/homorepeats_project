@@ -10,8 +10,7 @@ sys.path.append(os.path.abspath('../../lib'))
 from lib.constants import *
 
 
-# function 1: read proteome into a dictionary
-def Proteome_dictionary(proteome): #Code to store protein data from proteome in a dict (UniprotID, gene name, sequence)
+def Proteome_dictionary(proteome): # Code to store protein data from proteome in a dict (UniprotID, gene name, sequence)
     global proteomedict
     proteomedict = defaultdict(lambda: {"gene_name": None, "sequence": ""})  #Create empty dictionary (uniprot -> gn, sequence)
     with open(proteome, 'r') as file:  # Read proteome file
