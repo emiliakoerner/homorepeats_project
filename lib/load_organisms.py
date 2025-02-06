@@ -56,9 +56,11 @@ def get_filtered_organisms():
         if up_id in name_mapping:
             all_organisms[up_id]["name"] = name_mapping[up_id]
 
-
-    # Filter organisms based on selection
-    return {k: v for k, v in all_organisms.items() if k in SELECTED_ORGANISMS}
+    if SELECTED_ORGANISMS:
+        # Filter organisms based on selection
+        return {k: v for k, v in all_organisms.items() if k in SELECTED_ORGANISMS}
+    else:
+        return {k: v for k, v in all_organisms.items() if v["category"] in SELECTED_TAXA}
 
 # Execution
 organisms = get_filtered_organisms()
