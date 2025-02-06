@@ -1,3 +1,63 @@
+# README for scripts related to Housekeeping genes
+
+# Mapping_hklists_to_Uniprot.py
+# Mapping housekeeping lists from different sources to UniProt using underlying data from UniProt ID mapping tool
+## Import python modules
+``` python
+import os
+import sys
+sys.path.append(os.path.abspath('../../lib'))
+from lib.constants import *
+
+```
+## Define file paths dynamically for each organism (does not Need to be changed when Folder structure of repository is preserved)
+``` python
+file_paths = {}
+for up_id in SELECTED_ORGANISMS:
+    file_paths[up_id] = {
+        # Data
+        'UNMAPPED_HK_LIST_FILE': os.path.join(MAINTABLES_DIR, f"hk_unmapped/{up_id}_hk_unmapped.txt"),
+        'HK_LIST_FILE': os.path.join(OUTPUT_DIR, f"housekeeping_lists/{up_id}_hk.txt"),
+        # Results
+        'MAPPED_HK_POLYX_FILE': os.path.join(CURRENT_DIR, f"proteomes_hrs_hk/{up_id}_hrs_hk.tsv")
+    }
+```
+
+## Functions
+``` python
+# Function to map Housekeeping gene lists to Uniprot using the
+# underlying data files of the Uniprot Mapping tool.
+def Housekeeping_mapping_uniprot(hk_file, mapping_file, output_file):
+    with open(mapping_file, 'r') as mapping:
+        mapping_lines = mapping.readlines()     # Mapping file is read into python storage
+    with open(hk_file, 'r') as hk_file, open(hk_list, 'w') as output:
+        for line in hk_file:
+            listid = line.strip().split("\t")[0]    # Hk genes are stored and iterated through
+            for line2 in mapping_lines:
+                columns = line2.strip().split("\t")
+                mapid = columns[2]     # species-specific IDs are always in the third column of the mapping file
+                if listid in mapid:     # If a matching entry in the mapping file is found,
+                    uniprot_id = columns[0]     # The Uniprot ID is stored and written into an output file with both IDs
+                    output.write(f"{listid}\t{uniprot_id}\n")
+                    break
+```
+## File paths and calling the function
+``` python
+for up_id in SELECTED_ORGANISMS:
+    hk_file = file_paths[up_id]['UNMAPPED_HK_LIST_FILE']
+    mapping_file = globals().get(f"{up_id}_mapping")
+    hk_list = file_paths[up_id]['HK_LIST_FILE']
+
+    print(f"Processing {up_id}...")  # Print status update
+    Housekeeping_mapping_uniprot(hk_file, mapping_file, hk_list)
+
+
+```
+
+# Create_hrs_hk_file.py: Adds Housekeeping Status to proteome_hrs files (List of Proteins for each proteome with polyxdata)
+
+## Import python modules
+``` python
 import os
 import sys
 import re
@@ -5,9 +65,11 @@ from collections import defaultdict
 from lib.load_organisms import organisms
 sys.path.append(os.path.abspath('../../lib'))
 from lib.constants import *  # Import constants.py from hr_lib
+```
 
-# Finds proteome_hrs file for each organism in SELECTED_ORGANISMS or SELECTED_TAXA and defines the file paths dynamically
-# Processing function that calls the mapping function
+## Functions
+``` python
+# Finds proteome_hrs file for each organism in SELECTED_ORGANISMS or SELECTED_TAXA and defines the file paths dynamically. Processing function that calls the mapping function
 def Process_proteomes():
     for up_id in organisms:  # Loop through each selected organism
         print(f"Processing {up_id}...")
@@ -66,7 +128,8 @@ def Map_to_hklist(proteome_hrs, housekeeping_list, output):
                               f"{total_length}\t{pption}\t{groups}\t{hk_status}\n")
 
     print(f"Housekeeping mapping complete for {proteome_hrs}")
-
-
-# Run the function
+```
+## Call function the function
+``` python
 Process_proteomes()
+```

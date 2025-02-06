@@ -1,7 +1,3 @@
-# what do I need?
-# polyx scanner output for every single proteome - how?
-# then just make a list with uniprot id, gene name, proteome length and then add polyx info.
-
 import os
 import re
 from collections import defaultdict

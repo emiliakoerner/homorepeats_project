@@ -15,6 +15,10 @@ def decompress_fasta(gz_file):  # Decompress proteome file
             shutil.copyfileobj(f_in, f_out)
     return uncompressed
 
+def Shorten_filename(filename, max_length=150):
+    if len(filename) > max_length:
+        filename = filename[:max_length]
+    return filename
 
 # Input: Proteome
 # Output: Polyx output
@@ -32,7 +36,10 @@ def run_polyx():    # Runs polyx2_standalone.pl on all organisms in SELECTED_ORG
         organism_output_dir = os.path.join(POLYX_DIR, category, up_id)  # Define output folder
         os.makedirs(organism_output_dir, exist_ok=True)
 
-        output_file = os.path.join(organism_output_dir, f"{up_id}_{organism_name}_polyx.txt")   # constructs file name from
+        raw_filename = f"{up_id}_{organism_name}_polyx.txt"
+        safe_filename = Shorten_filename(raw_filename)
+
+        output_file = os.path.join(organism_output_dir, safe_filename)   # constructs file name from
                                                                                     # output path, UP ID and organism name
         print(f"Running PolyX for {up_id} ({data['name']})...")
 
