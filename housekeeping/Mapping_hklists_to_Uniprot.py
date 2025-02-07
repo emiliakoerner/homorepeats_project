@@ -4,6 +4,7 @@ import os
 import sys
 sys.path.append(os.path.abspath('../../lib'))
 from lib.constants import *
+from lib.load_organisms import organisms
 
 # Function to map Housekeeping gene lists to Uniprot using the
 # underlying data files of the Uniprot Mapping tool.
@@ -23,7 +24,7 @@ def Housekeeping_mapping_uniprot(hk_file, mapping_file, output_file):
 
 # Define dynamic file paths for each organism
 file_paths = {}
-for up_id in SELECTED_ORGANISMS:
+for up_id in organisms:
     file_paths[up_id] = {
         # Data
         'UNMAPPED_HK_LIST_FILE': os.path.join(MAINTABLES_DIR, f"hk_unmapped/{up_id}_hk_unmapped.txt"),
@@ -31,8 +32,6 @@ for up_id in SELECTED_ORGANISMS:
         # Results
         'MAPPED_HK_POLYX_FILE': os.path.join(CURRENT_DIR, f"proteomes_hrs_hk/{up_id}_hrs_hk.tsv")
     }
-
-for up_id in SELECTED_ORGANISMS:
     hk_file = file_paths[up_id]['UNMAPPED_HK_LIST_FILE']
     mapping_file = globals().get(f"{up_id}_mapping")
     hk_list = file_paths[up_id]['HK_LIST_FILE']

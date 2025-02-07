@@ -4,6 +4,7 @@ from collections import defaultdict
 import sys
 sys.path.append(os.path.abspath('../../lib'))
 from lib.constants import *
+from lib.load_organisms import organisms
 
 
 def Proteome_dictionary(proteome): # Code to store protein data from proteome in a dict (UniprotID, gene name, sequence)
@@ -82,7 +83,7 @@ def Create_final_doc(outputfile):    #Code to create final document by adding po
 
 # function 4: main processing function
 def Processing_proteomes():
-    for up_id in SELECTED_ORGANISMS:
+    for up_id in organisms:
         category = next((cat for cat in TAXON_CATEGORIES if os.path.exists(os.path.join(REF_DIR, cat, up_id))), None)
         if not category:
             print(f"Organism {up_id} not found in any category, skipping...")

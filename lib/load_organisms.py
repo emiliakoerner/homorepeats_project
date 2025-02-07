@@ -2,6 +2,7 @@ import os
 import csv
 from constants import *
 import gzip
+import argparse
 
 def discover_organisms():
     #Scan directories and find all organisms (UP IDs) and creates a dictionary with UP IDs as key, taxon category and
@@ -49,6 +50,38 @@ def parse_readme():
 
 def get_filtered_organisms():
     # Return only the selected organisms with paths and names by calling the first 2 functions
+    parser = argparse.ArgumentParser(description="Filter organisms for processing.")
+    parser.add_argument("--organisms", nargs="*", help="List of selected organisms (UP IDs)")
+    parser.add_argument("--taxa", nargs="*", choices=TAXON_CATEGORIES, help="Select organisms by taxonomic group")
+    args = parser.parse_args()
+
+    all_organisms = discover_organisms()
+    name_mapping = parse_readme()
+
+    for up_id in all_organisms:
+        if up_id in name_mapping:
+            all_organisms[up_id]["name"] = name_mapping[up_id]
+
+    if args.organisms:
+        selected_organisms = set(args.organisms)
+    elif args.taxa:
+        selected_organisms = {k for k, v in all_organisms.items() if v["category"] in args.taxa}
+    else:
+        selected_organisms = SELECTED_ORGANISMS
+    if selected_organisms:
+        return {k: v for k, v in all_organisms.items() if k in selected_organisms}
+    else:
+        return {k: v for k, v in all_organisms.items() if v["category"] in SELECTED_TAXA}
+
+# Execution
+organisms = get_filtered_organisms()
+print("Discovered Organisms:")
+for up_id, info in organisms.items():
+    print(f"UP ID: {up_id}, Name: {info.get('name', 'Unknown')}, Category: {info['category']}, Fasta Path: {info['fasta_path']}")
+
+
+"""def get_filtered_organisms():
+    # Return only the selected organisms with paths and names by calling the first 2 functions
     all_organisms = discover_organisms()
     name_mapping = parse_readme()
 
@@ -61,9 +94,4 @@ def get_filtered_organisms():
         return {k: v for k, v in all_organisms.items() if k in SELECTED_ORGANISMS}
     else:
         return {k: v for k, v in all_organisms.items() if v["category"] in SELECTED_TAXA}
-
-# Execution
-organisms = get_filtered_organisms()
-print("Discovered Organisms:")
-for up_id, info in organisms.items():
-    print(f"UP ID: {up_id}, Name: {info.get('name', 'Unknown')}, Category: {info['category']}, Fasta Path: {info['fasta_path']}")
+"""
