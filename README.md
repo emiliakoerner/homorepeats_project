@@ -18,10 +18,10 @@ This repository contains the data and code needed to reproduce the results repor
 
 ### Short guide for running scripts
 - Download or move Reference proteomes while preserving the structure (ftp.uniprot.org/pub/.../Reference_Proteomes_2024/06) to the same place as the repository. Your structure should look like this:
-Harddrive_dir/
-[/ftp_uniprot.org/pub/...
-[/low_complexity_project
-[/output
+	- Harddrive_dir/
+		- /ftp_uniprot.org/pub/...
+		- /low_complexity_project
+		- /output
 
 - Run the script runpolyx.py, then process_proteomes_and_polyxdata.py from /get_lcrs/homorepeats/
 - Run the scripts Mapping_hk_lists_to_Uniprot.py, then Create_hrs_hk_file.py from /housekeeping/
