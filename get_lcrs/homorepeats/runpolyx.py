@@ -29,7 +29,7 @@ def run_polyx():    # Runs polyx2_standalone.pl on all organisms in SELECTED_ORG
     for up_id, data in organisms.items():
         category = data["category"]
         fasta_gz_path = data["fasta_path"]
-        organism_name = data["name"].replace(" ", "_").replace("\'", "").replace("/", "_")  # Sanitize file name
+        organism_name = data["name"].replace(" ", "_").replace("\'", "_").replace("/", "_").replace(":", "_")  # Sanitize file name
 
         fasta_path = decompress_fasta(fasta_gz_path)    # Decompress fasta file by calling the function
 

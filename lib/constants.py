@@ -25,10 +25,10 @@ README_PATH = os.path.join(REF_DIR, "README")   # contains information about ref
 
 # Taxons and the folder structure are defined by Uniprot
 TAXON_CATEGORIES = ["Archaea", "Bacteria", "Eukaryota", "Viruses"]
-#SELECTED_ORGANISMS = None
+SELECTED_ORGANISMS = None
 #Must be None for 'SELECTED_TAXA' to be considered!
-SELECTED_ORGANISMS = {"UP000005640", "UP000000589", "UP000000803", "UP000001940", "UP000006548", "UP000000625", "UP000002311"}
-SELECTED_TAXA = {"Eukaryota", "Bacteria", "Archaea"}
+#SELECTED_ORGANISMS = {"UP000005640", "UP000000589", "UP000000803", "UP000001940", "UP000006548", "UP000000625", "UP000002311"}
+SELECTED_TAXA = {"Eukaryota"}
 # Select organisms that you want to process. All 4 main scripts use this set!
 
 # mapping files from Uniprot for housekeeping. Hardcored to preserve the original file names from Uniprot
