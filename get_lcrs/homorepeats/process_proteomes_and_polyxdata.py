@@ -3,8 +3,9 @@ import re
 from collections import defaultdict
 import sys
 sys.path.append(os.path.abspath('../../lib'))
-from lib.constants import *
-from lib.load_organisms import organisms
+from constants import *
+from load_organisms import organisms
+import gzip
 
 
 def Proteome_dictionary(proteome): # Code to store protein data from proteome in a dict (UniprotID, gene name, sequence)
@@ -95,7 +96,7 @@ def Processing_proteomes():
 
 # Find the correct FASTA file (UPID_TaxID.fasta)
         fasta_file = next(
-            (f for f in os.listdir(fasta_folder) if f.endswith(".fasta") or f.endswith(".fasta.gz")), None
+            (f for f in os.listdir(fasta_folder) if f.endswith(".fasta")), None
         )
         if not fasta_file:
             print(f"No FASTA file found for {up_id}")
@@ -117,7 +118,7 @@ def Processing_proteomes():
             continue
 
         polyx_path = os.path.join(polyx_folder, polyx_file)
-        output_path = os.path.join(OUTPUT_DIR, "proteomes_hrs", category, f"{up_id}_hrs.tsv")
+        output_path = os.path.join(OUTPUT_DIR, "proteomes_hrs", category, up_id, f"{up_id}_hrs.tsv")
 
         # Create output category directory if not exists
         os.makedirs(os.path.dirname(output_path), exist_ok=True)

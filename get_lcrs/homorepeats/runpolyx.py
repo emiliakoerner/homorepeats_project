@@ -5,8 +5,8 @@ import shutil
 import sys
 import gzip
 sys.path.append(os.path.abspath('../../lib'))
-from lib.load_organisms import get_filtered_organisms
-from lib.constants import *
+from load_organisms import get_filtered_organisms
+from constants import *
 
 def decompress_fasta(gz_file):  # Decompress proteome file
     uncompressed = gz_file.replace(".gz", "")
@@ -15,10 +15,10 @@ def decompress_fasta(gz_file):  # Decompress proteome file
             shutil.copyfileobj(f_in, f_out)
     return uncompressed
 
-def Shorten_filename(filename, max_length=150):
-    if len(filename) > max_length:
-        filename = filename[:max_length]
-    return filename
+def Shorten_name(organism, max_length=200):
+    if len(organism) > max_length:
+        organism = organism[:max_length]
+    return organism
 
 # Input: Proteome
 # Output: Polyx output
@@ -29,17 +29,17 @@ def run_polyx():    # Runs polyx2_standalone.pl on all organisms in SELECTED_ORG
     for up_id, data in organisms.items():
         category = data["category"]
         fasta_gz_path = data["fasta_path"]
-        organism_name = data["name"].replace(" ", "_").replace("\'", "_").replace("/", "_").replace(":", "_")  # Sanitize file name
+        raw_organism_name = data["name"].replace(" ", "_").replace("\'", "_").replace("/", "_").replace(":", "_")  # Sanitize file name
+        safe_organism_name = Shorten_name(raw_organism_name)
 
         fasta_path = decompress_fasta(fasta_gz_path)    # Decompress fasta file by calling the function
 
         organism_output_dir = os.path.join(POLYX_DIR, category, up_id)  # Define output folder
         os.makedirs(organism_output_dir, exist_ok=True)
 
-        raw_filename = f"{up_id}_{organism_name}_polyx.txt"
-        safe_filename = Shorten_filename(raw_filename)
+        filename = f"{up_id}_{safe_organism_name}_polyx.txt"
 
-        output_file = os.path.join(organism_output_dir, safe_filename)   # constructs file name from
+        output_file = os.path.join(organism_output_dir, filename)   # constructs file name from
                                                                                     # output path, UP ID and organism name
         print(f"Running PolyX for {up_id} ({data['name']})...")
 
