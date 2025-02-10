@@ -5,18 +5,16 @@ import shutil
 import sys
 import gzip
 import concurrent.futures  # For parallel execution
+import tempfile
 
 sys.path.append(os.path.abspath('../../lib'))
 from load_organisms import get_filtered_organisms
 from constants import *
 
 
-def decompress_fasta(gz_file):  # Decompress proteome file
-    uncompressed = gz_file.replace(".gz", "")
-    if not os.path.exists(uncompressed):
-        with gzip.open(gz_file, 'rb') as f_in, open(uncompressed, 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
-    return uncompressed
+def read_fasta_from_gz(gz_file):  # Decompress proteome file
+    with gzip.open(gz_file, 'rt') as f_in:  # 'rt' = read text mode
+        return f_in.read()  # Return file content as a string
 
 
 def Shorten_name(organism, max_length=200):
@@ -35,7 +33,7 @@ def process_organism(up_id, data):
                                                                                                     "_")  # Sanitize file name
     safe_organism_name = Shorten_name(raw_organism_name)
 
-    fasta_path = decompress_fasta(fasta_gz_path)  # Decompress fasta file
+    fasta_content = read_fasta_from_gz(fasta_gz_path)  # Decompress fasta file
 
     organism_output_dir = os.path.join(POLYX_DIR, category, up_id)  # Define output folder
     os.makedirs(organism_output_dir, exist_ok=True)
@@ -45,10 +43,14 @@ def process_organism(up_id, data):
 
     print(f"Running PolyX for {up_id} ({data['name']})...")
 
-    # Change working directory to output folder to run PolyX
-    os.chdir(organism_output_dir)
+    """# Change working directory to output folder to run PolyX
+    os.chdir(organism_output_dir)"""
 
-    command = ["perl", polyx_script, fasta_path]  # Command to run the Perl script
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".fasta") as temp_fasta:
+        temp_fasta.write(fasta_content.encode())
+        temp_fasta = temp_fasta.name
+
+    command = ["perl", polyx_script, temp_fasta]  # Command to run the Perl script
     try:
         subprocess.run(command, check=True)  # Run PolyX
         temp_output = "output_polyx.txt"  # Temporary output file
