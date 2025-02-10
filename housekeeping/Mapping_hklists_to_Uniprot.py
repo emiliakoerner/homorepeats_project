@@ -3,8 +3,8 @@
 import os
 import sys
 sys.path.append(os.path.abspath('../../lib'))
-from lib.constants import *
-from lib.load_organisms import organisms
+from constants import *
+from load_organisms import organisms
 
 # Function to map Housekeeping gene lists to Uniprot using the
 # underlying data files of the Uniprot Mapping tool.

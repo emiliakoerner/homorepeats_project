@@ -1,7 +1,6 @@
 import os
 import csv
 from constants import *
-import gzip
 import argparse
 
 def discover_organisms():

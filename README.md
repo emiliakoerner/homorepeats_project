@@ -55,7 +55,7 @@ The species-specific housekeeping gene lists were obtained from different public
 	- **iupred**
 	- **homorepeats**
 		- polyx2: Contains the perl script PolyX2 scanner [(Mier and Andrade-Navarro, 2022)](https://www.mdpi.com/2073-4425/13/5/758) downloaded from [here]
-(https://cbdm-01.zdv.uni-mainz.de/~munoz/polyx2/) including a README file.
+(https://cbdm-01.zdv.uni-mainz.de/~munoz/polyx2/) including a README file. Needs Perl + BioPerl
 		- runpolyx.py: Python script to run PolyX2 on every reference proteomes defined in constants.py.
 		- Process_proteomes_and_polyxdata.py: Creates a list of Proteins from the proteome fasta file and adds polyxdata from the output of runpolyx.py
 

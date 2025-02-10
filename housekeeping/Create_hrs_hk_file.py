@@ -3,8 +3,8 @@ import sys
 import re
 from collections import defaultdict
 sys.path.append(os.path.abspath('../../lib'))
-from lib.load_organisms import organisms
-from lib.constants import *  # Import constants.py from hr_lib
+from load_organisms import organisms
+from constants import *  # Import constants.py from hr_lib
 
 # Finds proteome_hrs file for each organism in SELECTED_ORGANISMS or SELECTED_TAXA and defines the file paths dynamically
 # Processing function that calls the mapping function
