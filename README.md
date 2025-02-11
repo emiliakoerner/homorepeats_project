@@ -10,22 +10,18 @@ This repository contains the data and code needed to reproduce the results repor
 		- process_proteomes_and_polyxdata.py
  - **housekeeping** contains scripts to map housekeeping lists and add housekeeping status to a list of proteins
 	- Mapping_hk_lists_to_Uniprot.py
-	- Create_hrs_hk_file
+	- Create_hrs_hk_file.py
 - **lib**
-	- contants.py: Defines paths relative to its current working directory
+	- constants.py: Defines paths for this repository relative to the current working Directory and defines Base directories for Input and Output, by Default relative to the repository Directory.
 	- load_organisms.py: Loads reference proteomes from a local storage location defined in constants.py
  - **main_tables** contains tables needed as input, like Housekeeping gene lists (before mapping) and mapping files from Uniprot
 
 ### Short guide for running scripts
-- Download or move Reference proteomes while preserving the structure (ftp.uniprot.org/pub/.../Reference_Proteomes_2024/06) to the same place as the repository. Your structure should look like this:
-	- Harddrive_dir/
-		- /ftp_uniprot.org/pub/...
-		- /low_complexity_project
-		- /output
-
-- Run the script runpolyx.py, then process_proteomes_and_polyxdata.py from /get_lcrs/homorepeats/
-- Run the scripts Mapping_hk_lists_to_Uniprot.py, then Create_hrs_hk_file.py from /housekeeping/
-- All scripts will use SELECTED_ORGANISMS from constants.py by default. Pass your desired organisms or taxa as arguments like this:
+- **Download Reference proteomes** from UniProt while preserving the structure (ftp.uniprot.org/pub/.../Reference_Proteomes_2024/06).
+- Edit constants.py to **define your base directories for Input and Output**. Both will be in the same place as this repository by Default. Change Input_base_dir and Output_base_dir to your desired paths, all other paths are relative to these base directories. 
+- Run the script **runpolyx.py**, then **process_proteomes_and_polyxdata.py** from /get_lcrs/homorepeats/
+- Run the scripts **Mapping_hk_lists_to_Uniprot.py**, then **Create_hrs_hk_file.py** from /housekeeping/
+- All scripts will use SELECTED_ORGANISMS from constants.py by default. **Pass your desired organisms or taxa as arguments** like this:
 
 python script.py --organisms UP00xxxxx UP00xxxxxx
 
@@ -33,7 +29,7 @@ or
 
 python script.py --taxa Bacteria Viruses
 
-or configure SELECTED_ORGANISMS or SELECTED_TAXA in constants.py for a permanent solution. SELECTED_ORGANISMS has to be None for SELECTED_TAXA to be considered.
+or **configure SELECTED_ORGANISMS or SELECTED_TAXA in constants.py for a permanent solution**. SELECTED_ORGANISMS has to be None for SELECTED_TAXA to be considered.
 
 That's it!
 
@@ -60,5 +56,5 @@ The species-specific housekeeping gene lists were obtained from different public
 		- Process_proteomes_and_polyxdata.py: Creates a list of Proteins from the proteome fasta file and adds polyxdata from the output of runpolyx.py
 
 ### lib: Files need to run the main work
-	- constants.py: Python script to establish file paths needed for the other scripts. Select organisms you want to process here in SELECTED_ORGANISMS
+	- constants.py: Python script to establish file paths needed for the other scripts. Select organisms you want to process here in SELECTED_ORGANISMS and define your desired base directories with OUTPUT_BASE_DIR and INPUT_BASE_DIR
 	- load_organisms.py: Finds proteome files, collects them in a dictionary, matches UP IDs to scientific organism names and returns the organisms selected in constants.py

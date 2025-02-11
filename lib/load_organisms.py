@@ -3,8 +3,24 @@ import csv
 from constants import *
 import argparse
 
+def parse_readme():
+    # Parse the README file to map Proteome IDs to Organism Names. Returns a dictionary
+    proteome_to_name = {}
+    with open(README_PATH, "r", encoding="utf-8") as readme_file:
+        reader = csv.reader(readme_file, delimiter="\t")
+        next(reader)  # Skip header row
+        for row in reader:
+            if len(row) >= 8:
+                proteome_id = row[0].strip()  # UP number
+                tax_id = row[1].strip()     # taxonomy ID
+                organism_name = row[7].strip()  # Species name
+                proteome_to_name[proteome_id] = (organism_name, tax_id)
+    return proteome_to_name
+
+
 def discover_organisms():
     #Scan directories and find all organisms (UP IDs) and creates a dictionary with UP IDs as key, taxon category and
+    proteome_to_name = parse_readme()
     organisms = {}                      # file path as values
     for category in TAXON_CATEGORIES:
         category_path = os.path.join(REF_DIR, category)
@@ -13,8 +29,13 @@ def discover_organisms():
                 organism_path = os.path.join(category_path, organism_id)
                 if os.path.isdir(organism_path):  # Ensure it's a folder
                     fasta_file = None
+                    try:
+                        organism_id, tax_id = proteome_to_name[organism_id]
+                    except KeyError:
+                        print(f"Skipping {organism_id}: not an organism")
+                        continue
                     for file in os.listdir(organism_path):
-                        if file.endswith(".fasta.gz"):
+                        if file.endswith(f"{tax_id}.fasta.gz"):
                             fasta_file = os.path.join(organism_path, file)
                             break
                     if fasta_file:
@@ -22,7 +43,9 @@ def discover_organisms():
                         organisms[organism_id] = {
                             "category": category,
                             "fasta_path": fasta_file
-                    }
+                        }
+                    elif organism_id.startswith("UP_"):
+                        print("Discovering organisms...")
                     else: print("fasta file not found for", organism_id)
         else: print("category_path does not exist")
     return organisms
@@ -34,18 +57,6 @@ def discover_organisms():
     return None
 """
 
-def parse_readme():
-    # Parse the README file to map Proteome IDs to Organism Names. Returns a dictionary
-    proteome_to_name = {}
-    with open(README_PATH, "r", encoding="utf-8") as readme_file:
-        reader = csv.reader(readme_file, delimiter="\t")
-        next(reader)  # Skip header row
-        for row in reader:
-            if len(row) >= 8:
-                proteome_id = row[0].strip()  # UP number
-                organism_name = row[7].strip()  # Species name
-                proteome_to_name[proteome_id] = organism_name
-    return proteome_to_name
 
 def get_filtered_organisms():
     # Return only the selected organisms with paths and names by calling the first 2 functions
@@ -69,14 +80,23 @@ def get_filtered_organisms():
         selected_organisms = SELECTED_ORGANISMS
     if selected_organisms:
         return {k: v for k, v in all_organisms.items() if k in selected_organisms}
-    else:
+    elif SELECTED_TAXA:
         return {k: v for k, v in all_organisms.items() if v["category"] in SELECTED_TAXA}
+    else:
+        print("Please select one or more organisms or taxa you want to process by adding \"--organisms UP0000xxxx ...\""
+              "or \"--taxa Bacteria ...\" to your command when running the script or by specifying them in constants.py.")
 
 # Execution
 organisms = get_filtered_organisms()
 print("Discovered Organisms:")
 for up_id, info in organisms.items():
     print(f"UP ID: {up_id}, Name: {info.get('name', 'Unknown')}, Category: {info['category']}, Fasta Path: {info['fasta_path']}")
+
+
+
+
+
+
 
 
 """def get_filtered_organisms():

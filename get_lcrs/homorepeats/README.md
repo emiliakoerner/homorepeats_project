@@ -1,7 +1,6 @@
 # README for scripts related to Homorepeats
 
 # Input parameters:
-# Input parameters:
 If you want to select organisms manually:
 python script.py --organisms UP00xxxxx UP00xxxxxx
 If you want to select entire taxa manually:
@@ -11,12 +10,14 @@ If no arguments are provided when running the script, it falls back to SELECTED_
 # Runpolyx.py: Runs PolyX2 Scanner on all organisms in SELECTED_ORGANISMS or _TAXA and saves the Output outside of the repository. See constants.py for paths
 - Input: Reference proteomes (.fasta)
 - Output: Polxydata file (.txt) -> Polyx scanner output. Saved in output/homorepeats/polyxdata/{taxon}/{organism}
-- Dependencies: constants.py and load_organisms.py
+- Dependencies: constants.py and load_organisms.py, Perl and Bioperl
+- Attention: Will decompress the proteome files in the input folder, adding the unpacked file to the folder of each organism.
 
 ## Functions
-- decompress_fasta(gz_file): Decompresses proteome file for processing
-- Shorten_filename(filename, max_length=150): Shortens output file name to a maximum of 150 characters to avoid crashing due to extraordinarily long organism names
-- run_polyx.py: Runs polyx2_standalone.pl on all organisms selected in constants.py. Calls decompress.fasta and Shorten_filename while doing so. Saves output files as UPID_organism_name_polyx.txt
+- Read_fasta_from_gz(gz_file): Reads fasta file from the gz Folder without unpacking it permanently
+- Shorten_name(filename, max_length=150): Shortens organism name to a maximum of 200 characters to avoid crashing due to extraordinarily long file names
+- process_organism: Runs polyx2_standalone.pl on all organisms selected in constants.py. Calls Read_fasta_from_gz and Shorten_name while doing so. Saves output files as UPID_organism_name_polyx.txt
+- run_polyx.py: Executes process_organisms using multiple CPU cores to Speed up the process. Uses 4 cpu cores in parallel 
 
 # process_proteomes_and_polyxdata.py: Reads proteome file and corresponding polyx file (Output from runpolyx.py) and creates a new file with a list of Proteins and their polyx regions.
 - Input: Reference proteomes (.fasta) and respective polyx data files (output from runpolyx.py)

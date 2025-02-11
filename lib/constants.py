@@ -7,6 +7,8 @@ Output_base_dir is your base directory for all output file
 Input_base_dir is your base directory for all input files
 By default, all base dirs (input, output and repository) are in the same root directory.
 All other paths are relative to your current working directory or your base dirs!"
+
+Also: Select your desired organisms or taxa here!
 """
 
 # Base directories
@@ -18,8 +20,8 @@ GETLCRS_DIR = os.path.join(REP_BASE_DIR, "get_lcrs")    # scripts for analysing 
 HR_DIR = os.path.join(GETLCRS_DIR, "homorepeats")   # scripts for analysing homorepeats
 
 # BASE dir for output
-OUTPUT_BASE_DIR = os.path.abspath(os.path.join(REP_BASE_DIR, "..")) # Hardddrive directory/root
-OUTPUT_DIR = os.path.join(OUTPUT_BASE_DIR, "output", "homorepeats")  # where output files will be stored
+OUTPUT_BASE_DIR = os.path.abspath(os.path.join(REP_BASE_DIR, "..")) # Base directory for all output files
+OUTPUT_DIR = os.path.join(OUTPUT_BASE_DIR, "output", "homorepeats")  # For all homorepeat outputs
 POLYX_DIR = os.path.join(OUTPUT_DIR, "polyxdata")           # where polyx scanner output will be moved after creating it
 PROTEOMES_HRS_DIR = os.path.join(OUTPUT_DIR, "proteomes_hrs")
 PROTEOMES_HRS_HK_DIR = os.path.join(OUTPUT_DIR, "proteomes_hrs_hk")
@@ -39,7 +41,7 @@ SELECTED_ORGANISMS = None
 SELECTED_TAXA = {"Viruses"}
 # Select organisms or taxa you want to process. All 4 main scripts use this set!
 
-# mapping files from Uniprot for housekeeping. Hardcored to preserve the original file names from Uniprot
+# mapping files from Uniprot for housekeeping.
 UP000005640_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\HUMAN_9606_idmapping.txt")
 UP000000589_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\MOUSE_10090_idmapping.txt")
 UP000000803_mapping = os.path.join(MAINTABLES_DIR, "mapping_files\\DROME_7227_idmapping.txt")

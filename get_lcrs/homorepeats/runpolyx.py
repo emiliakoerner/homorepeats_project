@@ -65,12 +65,10 @@ def process_organism(up_id, data):
     except subprocess.CalledProcessError as e:
         print(f"Error running PolyX for {up_id}: {e}")
 
-
-def run_polyx():
+# Set the number of parallel processes (adjust based on your CPU)
+def run_polyx(max_workers = 4):
     """Runs PolyX in parallel for all selected organisms"""
     organisms = get_filtered_organisms()  # Load selected organisms
-    # Set the number of parallel processes (adjust based on your CPU)
-    max_workers = min(4, os.cpu_count())  # Use up to 4 processes or max CPU cores
 
     # Use a process pool to parallelize execution
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
