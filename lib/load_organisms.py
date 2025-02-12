@@ -30,7 +30,7 @@ def discover_organisms():
                 if os.path.isdir(organism_path):  # Ensure it's a folder
                     fasta_file = None
                     try:
-                        organism_id, tax_id = proteome_to_name[organism_id]
+                        organism_name, tax_id = proteome_to_name[organism_id]
                     except KeyError:
                         print(f"Skipping {organism_id}: not an organism")
                         continue
@@ -39,10 +39,11 @@ def discover_organisms():
                             fasta_file = os.path.join(organism_path, file)
                             break
                     if fasta_file:
-                        #print(f"found fasta file for {organism_id}")
+                        #print(f"found fasta file for {organism_id} and {tax_id}")
                         organisms[organism_id] = {
                             "category": category,
-                            "fasta_path": fasta_file
+                            "fasta_path": fasta_file,
+                            "tax_id": tax_id
                         }
                     elif organism_id.startswith("UP_"):
                         print("Discovering organisms...")
@@ -70,7 +71,7 @@ def get_filtered_organisms():
 
     for up_id in all_organisms:
         if up_id in name_mapping:
-            all_organisms[up_id]["name"] = name_mapping[up_id]
+            all_organisms[up_id]["name"] = name_mapping[up_id][0]
 
     if args.organisms:
         selected_organisms = set(args.organisms)
@@ -88,10 +89,11 @@ def get_filtered_organisms():
 
 # Execution
 organisms = get_filtered_organisms()
-print("Discovered Organisms:")
+# Debugging
+"""print("Discovered Organisms:")
 for up_id, info in organisms.items():
     print(f"UP ID: {up_id}, Name: {info.get('name', 'Unknown')}, Category: {info['category']}, Fasta Path: {info['fasta_path']}")
-
+"""
 
 
 

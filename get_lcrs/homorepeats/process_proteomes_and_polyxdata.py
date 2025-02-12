@@ -1,25 +1,30 @@
+import io
 import os
 import re
 from collections import defaultdict
 import sys
 sys.path.append(os.path.abspath('../../lib'))
-from constants import *
-from load_organisms import organisms
+from lib.constants import *
+from lib.load_organisms import *
 import gzip
 
+def read_fasta_from_gz(gz_file):  # Decompress proteome file
+    with gzip.open(gz_file, 'rt') as f_in:  # 'rt' = read text mode
+        return f_in.read()  # Return file content as a string
 
-def Proteome_dictionary(proteome): # Code to store protein data from proteome in a dict (UniprotID, gene name, sequence)
+def Proteome_dictionary(proteome_content): # Code to store protein data from proteome in a dict (UniprotID, gene name, sequence)
     global proteomedict
     proteomedict = defaultdict(lambda: {"gene_name": None, "sequence": ""})  #Create empty dictionary (uniprot -> gn, sequence)
-    with open(proteome, 'r') as file:  # Read proteome file
+    file = io.StringIO(proteome_content)
+    if True:
         current_id = None       # Variables to keep track of the current UP ID and its sequence
         current_sequence = []
         for line in file:       # Iterate through each line of the file
             if line.startswith('>'):    # If the line starts with '>', it is a header
                 if current_id:          # If there is a protein being processed already, save it to the dictionary
                     proteomedict[current_id]["sequence"] = ''.join(current_sequence)    # Join sequences without a divider
-                gn_match = re.search(r"GN=(\S+)", line) # look for gene name
-                uniprot_match = re.search(r">.+?\|([^\|]+)\|", line) # look for UP ID
+                gn_match = re.search(r"GN=(\S+)", line)  # look for gene name
+                uniprot_match = re.search(r">.+?\|([^\|]+)\|", line)  # look for UP ID
 
                 current_id = uniprot_match.group(1) if uniprot_match else None      # put UP ID as current ID
                 gene_name = gn_match.group(1) if gn_match else None                 # store gene name too
@@ -31,8 +36,9 @@ def Proteome_dictionary(proteome): # Code to store protein data from proteome in
                 current_sequence.append(line.strip())   # If the line is not a header, store the sequence
         if current_id:
             proteomedict[current_id]["sequence"] = ''.join(current_sequence)  # Save the last protein sequence after loop finishes
-    print(len(proteomedict), "proteins in the dictionary")
+    #print(len(proteomedict), "proteins in the dictionary")
     return proteomedict
+
 
 # function 2: read polyx data into python
 def Polyx_dictionary(input):   #create dictionary to store information for each protein ID
@@ -61,11 +67,12 @@ def Polyx_dictionary(input):   #create dictionary to store information for each 
             polyxdata[protein_ID]["polyx_lengths"].append(length)
             polyxdata[protein_ID]["total_length"] += length
 
+
 # function 3: create file combining all the data
-def Create_final_doc(outputfile):    #Code to create final document by adding polyx info to the last output file
+def Create_final_doc(outputfile):    # Code to create final document by adding polyx info to the last output file
     with open(outputfile, 'w') as output:
         output.write(f"Genename\tUniProtID\tLength\tPolyx_count\tPolyx_types\tPolyx_lengths"
-                     f"\tTotal_length\tPption_polyx\tCount_grouped\n") # Header
+                     f"\tTotal_length\tPption_polyx\tCount_grouped\n")  # Header
         for uniprot_id, proteindata in proteomedict.items():  # Iterate through each dictionary entry aka protein
             sequence = proteindata["sequence"]  # Variables for Sequence, Length and gene name
             length = len(sequence)
@@ -73,19 +80,21 @@ def Create_final_doc(outputfile):    #Code to create final document by adding po
             if uniprot_id in polyxdata:     # If the protein has a polyx region, write polyx data into output file
                 data = polyxdata[uniprot_id]
                 polyx_count = data["polyx_count"]
-                polyx_types_combined = "/".join(data["polyx_types"])    # Join polyxtypes (stored as set) with / as divider
+                polyx_types_combined = "/".join(data["polyx_types"])  # Join polyxtypes (stored as set) with / as divider
                 polyx_lengths = "/".join(map(str, data["polyx_lengths"]))
                 total_length = data["total_length"]
                 aa_percent = round(int(total_length)/int(length), 4)
-                output.write(f"{gene_name}\t{uniprot_id}\t{length}\t"
-                                 f"{polyx_count}\t{polyx_types_combined}\t{polyx_lengths}\t{total_length}\t{aa_percent}\t{polyx_count}\n")
+                output.write(f"{gene_name}\t{uniprot_id}\t{length}\t{polyx_count}"
+                             f"\t{polyx_types_combined}\t{polyx_lengths}\t{total_length}\t{aa_percent}\t{polyx_count}\n")
             else:   # If protein has no polyx region, put 0 or - instead for poly x count, type and length
                 output.write(f"{gene_name}\t{uniprot_id}\t{length}\t0\t-\t0\t0\t0\t0\n")
 
+
 # function 4: main processing function
 def Processing_proteomes():
-    for up_id in organisms:
-        category = next((cat for cat in TAXON_CATEGORIES if os.path.exists(os.path.join(REF_DIR, cat, up_id))), None)
+    for up_id, data in organisms.items():
+        tax_id = data.get("tax_id")
+        category = data.get("category")
         if not category:
             print(f"Organism {up_id} not found in any category, skipping...")
             continue
@@ -93,16 +102,27 @@ def Processing_proteomes():
         fasta_folder = os.path.join(REF_DIR, category, up_id)
         if not os.path.isdir(fasta_folder):
             continue
-
 # Find the correct FASTA file (UPID_TaxID.fasta)
-        fasta_file = next(
+        fasta_file = f"{up_id}_{tax_id}.fasta.gz"
+        fasta_path = os.path.join(fasta_folder, fasta_file)
+
+        if not os.path.exists(fasta_path):
+            print(f"no fasta file found")
+            continue
+        try:
+            fasta_content = read_fasta_from_gz(fasta_path)
+            #print(f"Loaded fasta for {up_id}, length: {len(fasta_content)}")
+        except Exception as e:
+            print("error reading fasta file")
+            continue
+        """fasta_file = next(
             (f for f in os.listdir(fasta_folder) if f.endswith(".fasta")), None
         )
         if not fasta_file:
             print(f"No FASTA file found for {up_id}")
             continue
-
         proteome_path = os.path.join(fasta_folder, fasta_file)
+        """
 
         # Find the corresponding PolyX output
         polyx_folder = os.path.join(POLYX_DIR, category, up_id)
@@ -124,7 +144,7 @@ def Processing_proteomes():
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         # Process the proteome and PolyX data
-        Proteome_dictionary(proteome_path)
+        Proteome_dictionary(fasta_content)
         Polyx_dictionary(polyx_path)
         Create_final_doc(output_path)
         print(f"Processed {up_id}: created {output_path}")

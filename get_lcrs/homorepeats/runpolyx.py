@@ -27,12 +27,11 @@ def process_organism(up_id, data):
     polyx_script = os.path.join(HR_DIR, "polyx2", "polyx2_standalone.pl")
     category = data["category"]
     fasta_gz_path = data["fasta_path"]
-
     # Sanitize organism name for filenames
-    raw_organism_name = data["name"].replace(" ", "_").replace("\'", "_").replace("/", "_").replace(":",
-                                                                                                    "_")  # Sanitize file name
+    raw_organism_name = data.get("name", "Unknown")
+    raw_organism_name = raw_organism_name.replace(" ", "_").replace("\'", "_").replace("/", "_").replace(":",
+                                                "_")  # Sanitize file name
     safe_organism_name = Shorten_name(raw_organism_name)
-
     fasta_content = read_fasta_from_gz(fasta_gz_path)  # Decompress fasta file
 
     organism_output_dir = os.path.join(POLYX_DIR, category, up_id)  # Define output folder
@@ -43,18 +42,15 @@ def process_organism(up_id, data):
 
     print(f"Running PolyX for {up_id} ({data['name']})...")
 
-    """# Change working directory to output folder to run PolyX
-    os.chdir(organism_output_dir)"""
+    os.chdir(organism_output_dir)
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".fasta") as temp_fasta:
         temp_fasta.write(fasta_content.encode())
         temp_fasta = temp_fasta.name
-
     command = ["perl", polyx_script, temp_fasta]  # Command to run the Perl script
     try:
         subprocess.run(command, check=True)  # Run PolyX
         temp_output = "output_polyx.txt"  # Temporary output file
-
         # Move and rename output file
         if os.path.exists(temp_output):
             shutil.move(temp_output, output_file)
@@ -65,9 +61,18 @@ def process_organism(up_id, data):
     except subprocess.CalledProcessError as e:
         print(f"Error running PolyX for {up_id}: {e}")
 
+"""def run_polyx():
+    organisms = get_filtered_organisms()
+    print(f"Loaded {len(organisms)} organisms")
+
+    for up_id, data in organisms.items():
+        process_organism(up_id, data)  # Run directly without multiprocessing
+"""
+
 # Set the number of parallel processes (adjust based on your CPU)
-def run_polyx(max_workers = 4):
-    """Runs PolyX in parallel for all selected organisms"""
+def run_polyx(max_workers = 7):
+#Runs PolyX in parallel for all selected organisms
+    print("run_polyx() is being executed")  # Debug
     organisms = get_filtered_organisms()  # Load selected organisms
 
     # Use a process pool to parallelize execution
@@ -78,4 +83,3 @@ if __name__ == '__main__':
     import concurrent.futures  # Import inside main to avoid issues on Windows
 
     run_polyx()
-

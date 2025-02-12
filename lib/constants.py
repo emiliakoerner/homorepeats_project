@@ -25,7 +25,7 @@ OUTPUT_DIR = os.path.join(OUTPUT_BASE_DIR, "output", "homorepeats")  # For all h
 POLYX_DIR = os.path.join(OUTPUT_DIR, "polyxdata")           # where polyx scanner output will be moved after creating it
 PROTEOMES_HRS_DIR = os.path.join(OUTPUT_DIR, "proteomes_hrs")
 PROTEOMES_HRS_HK_DIR = os.path.join(OUTPUT_DIR, "proteomes_hrs_hk")
-HK_LISTS_DIR = os.path.join(OUTPUT_DIR, "housekeeping_lists")
+HK_LISTS_DIR = os.path.join(OUTPUT_BASE_DIR, "output", "housekeeping_lists")
 
 # BASE dir for input
 INPUT_BASE_DIR = os.path.abspath(os.path.join(REP_BASE_DIR, ".."))
@@ -38,7 +38,7 @@ TAXON_CATEGORIES = ["Archaea", "Bacteria", "Eukaryota", "Viruses"]
 SELECTED_ORGANISMS = None
 #Must be None for 'SELECTED_TAXA' to be considered!
 #SELECTED_ORGANISMS = {"UP000005640", "UP000000589", "UP000000803", "UP000001940", "UP000006548", "UP000000625", "UP000002311"}
-SELECTED_TAXA = {"Viruses"}
+SELECTED_TAXA = {"Eukaryota", "Archaea"}
 # Select organisms or taxa you want to process. All 4 main scripts use this set!
 
 # mapping files from Uniprot for housekeeping.
