@@ -48,13 +48,13 @@ The species-specific housekeeping gene lists were obtained from different public
 
 
 ### get_lcrs: Contains scripts to fetch low complexity regions via the perl program "PolyX2" [(Mier and Andrade-Navarro, 2022)](https://www.mdpi.com/2073-4425/13/5/758) or with IUPred3
-	- **iupred**
-	- **homorepeats**
-		- polyx2: Contains the perl script PolyX2 scanner [(Mier and Andrade-Navarro, 2022)](https://www.mdpi.com/2073-4425/13/5/758) downloaded from [here]
+- **iupred**
+- **homorepeats**
+	- polyx2: Contains the perl script PolyX2 scanner [(Mier and Andrade-Navarro, 2022)](https://www.mdpi.com/2073-4425/13/5/758) downloaded from [here]
 (https://cbdm-01.zdv.uni-mainz.de/~munoz/polyx2/) including a README file. Needs Perl + BioPerl
-		- runpolyx.py: Python script to run PolyX2 on every reference proteomes defined in constants.py.
-		- Process_proteomes_and_polyxdata.py: Creates a list of Proteins from the proteome fasta file and adds polyxdata from the output of runpolyx.py
+	- runpolyx.py: Python script to run PolyX2 on every reference proteomes defined in constants.py.
+	- Process_proteomes_and_polyxdata.py: Creates a list of Proteins from the proteome fasta file and adds polyxdata from the output of runpolyx.py
 
 ### lib: Files need to run the main work
-	- constants.py: Python script to establish file paths needed for the other scripts. Select organisms you want to process here in SELECTED_ORGANISMS and define your desired base directories with OUTPUT_BASE_DIR and INPUT_BASE_DIR
-	- load_organisms.py: Finds proteome files, collects them in a dictionary, matches UP IDs to scientific organism names and returns the organisms selected in constants.py
+- constants.py: Python script to establish file paths needed for the other scripts. Select organisms you want to process here in SELECTED_ORGANISMS and define your desired base directories with OUTPUT_BASE_DIR and INPUT_BASE_DIR
+- load_organisms.py: Finds proteome files, collects them in a dictionary, matches UP IDs to scientific organism names and returns the organisms selected in constants.py
