@@ -20,7 +20,7 @@ This repository contains the data and code needed to reproduce the results repor
 - **Download Reference proteomes** from UniProt while preserving the structure (ftp.uniprot.org/pub/.../Reference_Proteomes_2024/06).
 - Edit constants.py to **define your base directories for Input and Output**. Both will be in the same place as this repository by Default. Change Input_base_dir and Output_base_dir to your desired paths, all other paths are relative to these base directories. 
 - Run the script **runpolyx.py**, then **process_proteomes_and_polyxdata.py** from /get_lcrs/homorepeats/
-- Run the scripts **Mapping_hk_lists_to_Uniprot.py**, then **Create_hrs_hk_file.py** from /housekeeping/
+- Run the scripts **Mapping_hk_lists_to_Uniprot.py**, then **Create_hrs_hk_file.py** from /housekeeping/ (mind that this only works for the 7 model organisms mentioned below)
 - All scripts will use SELECTED_ORGANISMS from constants.py by default. **Pass your desired organisms or taxa as arguments** like this:
 
 python script.py --organisms UP00xxxxx UP00xxxxxx
@@ -37,9 +37,9 @@ That's it!
 ### Data: the annotations were downloaded from public repositories
 
 #### Proteins
-The [reference proteomes](https://www.uniprot.org/proteomes/?query=*&fil=reference%3Ayes) were downloaded from the Universal Protein Resource ([Uniprot](https://www.uniprot.org/)). Each proteome has a unique Uniprot-identifier (UPID). A [description](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/README) of the proteomes is also provided. It contains a table with information on every proteome: UPIDs, taxonomy_ids, species names, etc. All the reference proteomes were downloaded from [Uniprot FTP repository](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/) on ...2024. Note that Uniprot is updated regularly, every eight weeks. 
+The [reference proteomes](https://www.uniprot.org/proteomes/?query=*&fil=reference%3Ayes) were downloaded from the Universal Protein Resource ([Uniprot](https://www.uniprot.org/)). Each proteome has a unique Uniprot-identifier (UPID). A [description](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/README) of the proteomes is also provided. It contains a table with information on every proteome: UPIDs, taxonomy_ids, species names, etc. All the reference proteomes were downloaded from [Uniprot FTP repository](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/) on 29.01.2024. Note that Uniprot is updated regularly, every eight weeks. 
 
-### Housekeeping gene lists
+#### Housekeeping gene lists
 The species-specific housekeeping gene lists were obtained from different publications for [Homo sapiens](https://pubmed.ncbi.nlm.nih.gov/32663312/), [Mus musculus](https://pubmed.ncbi.nlm.nih.gov/32663312/), [Drosophila melanogaster](http://www.biomedcentral.com/1471-2164/7/277), [Caenorhabditis elegans](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010295), [Saccharomyces cerevisiae](https://www.nature.com/articles/nature00935), [Escherichia coli](https://journals.asm.org/doi/full/10.1128/jb.185.19.5673-5684.2003) and [Arabidopsis thaliana](https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-438).
 
 ### main_tables: Folder with files needed to recreate the results of the 7 organisms mentioned above, except the reference proteomes
